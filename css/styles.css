@@ -1,0 +1,120 @@
+html {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: url(../img/gradient.jpg) repeat-x #fff;
+	font-family: sans-serif;
+}
+
+h1 {
+	font-size: 32px;
+	font-weight: normal;
+	color: #2d2d2d;
+}
+
+div.uniqueFrame {
+	position: relative;
+	margin: 50px auto;
+	width: 1024px;
+	min-height: 768px;
+	overflow: hidden;
+        border: 50px solid #000;
+
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        border-radius: 20px;
+        -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.8);
+        box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.8);
+}
+
+#footer_copyright {
+  display: none !important;
+}
+
+div.uniqueFrame div.mask {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	display: none;
+	background: url(../img/img_spinner_dark.gif) no-repeat scroll center center rgb(37,37,37);
+}
+
+iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border: 0;
+	background-color: #f2f2f2;
+}
+
+#landingDiv {
+	position: relative;
+	margin: 0 auto;
+	width: 544px;
+}
+
+#landingDiv img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+#landscapeImage {
+	position: absolute;
+	top: 118px;
+	left: 71px;
+	width: 415px;
+	height: 311px;
+	z-index: 2;
+}
+
+#portraitImage {
+	position: absolute;
+	top: 46px;
+	left: 60px;
+	width: 311px;
+	height: 415px;
+	z-index: 4;
+}
+
+.devicesImage {
+	position: absolute;
+	background: url(../img/tablet.png) no-repeat scroll 0 0;
+	width: 544px;
+	height: 509px;
+	z-index: 6;
+}
+
+#deviceMessage {
+	position: absolute;
+	top: 520px;
+	left: 22px;
+	width: 500px;
+}
+
+button {
+	-moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+	box-shadow: inset 0px 1px 0px 0px #ffffff;
+	background-color: #ededed;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #dcdcdc;
+	display: block;
+	color: #777;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 6px 24px;
+	text-decoration: none;
+	text-shadow: 1px 1px 0px #ffffff;
+	cursor: pointer;
+}
+button:hover {
+	background-color: #dfdfdf;
+}
+button:active {
+}

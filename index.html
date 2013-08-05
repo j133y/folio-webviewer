@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Adobe Folio WebViewer</title>
+    <script type="text/javascript" src="http://cdn-contentviewer.adobe.com/public/pepper/wvel/2/WVEmbed.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+  </head>
+
+<body>
+  <div id="mainContainer">
+    <!-- Iframe destination -->
+  </div>
+
+  <script type="text/javascript">
+
+    var guid = querystring('guid')[0];
+    var productId = querystring('product_id')[0];
+    var foundUnsupported = false;
+
+    adobeDPS.libraryService.createLibrary(guid, {}, createLibraryHandler, function(error){console.error(error)});
+
+    function createLibraryHandler(folios) {
+      for (var s in folios) {
+        folio  = folios[s];
+        if (folio.productId == productId) {
+          folio.getArticleURL(createViewer);
+          console.log(folio);
+        }
+      }
+    }
+
+    var foundPaywall = false,
+    foundUnsupported = false,
+    wvQueryParamGroups = location.search.match(/[?&^#]wv=(s[\/%\-.\w]+)/),
+    wvQueryParam = wvQueryParamGroups && wvQueryParamGroups.length === 2 ? decodeURIComponent(wvQueryParamGroups[1]) : null;
+
+        function createViewer(url) {
+		var bridge = adobeDPS.frameService.createFrame({
+				boolIsFullScreen : false,
+				parentDiv : 'mainContainer',
+				wrapperClasses : 'uniqueFrame',
+				iframeID : 'demoFrame',
+				accountIDs : guid,
+				wvParam : url,
+				curtainClasses : 'mask hidden',
+				eventCallback : eventCallback,
+				errorCallback : errorCallback,
+                                footer : false,
+				redirectCallback : redirectCallbackHandler
+			});
+        }
+
+        function querystring(key) {
+          var re=new RegExp('(?:\\?|&)'+key+'=(.*?)(?=&|$)','gi');
+          var r=[], m;
+          while ((m=re.exec(document.location.search)) != null) r.push(m[1]);
+          return r;
+        }
+
+		function renderCustomContent(title, coverImages, publicationName) {
+
+			var container = document.getElementById('mainContainer');
+
+			var coverP = coverImages.portrait;
+			var coverL = coverImages.portrait.replace('/portrait', '/landscape');
+
+
+			var htmlContent = '<div id="landingDiv">';
+				htmlContent += '<div id="landscapeImage">';
+				htmlContent += '<img src="' + coverL + '" alt=""/>';
+				htmlContent += '</div>';
+				htmlContent += '<div id="portraitImage">';
+				htmlContent += '<img src="' + coverP + '" alt=""/>';
+				htmlContent += '</div>';
+				htmlContent += '<div class="devicesImage"></div>';
+				htmlContent += '<div id="deviceMessage">';
+				htmlContent += '<h1>' + publicationName + ' is not yet supported in this device\'s browser.</h1>';
+				htmlContent += '<button><a hre="https://itunes.apple.com/us/app/adobe-inspire/id536737621?mt=8">Get the App<a></button>';
+				htmlContent += '</div>';
+				htmlContent += '</div>';
+
+			var imageL = document.createElement('img');
+				imageL.src = coverL;
+				imageL.onload = function() {
+					var imageP = document.createElement('img');
+					imageP.src = coverP;
+					imageP.onload = function() {
+						container.innerHTML = htmlContent;
+
+					};
+				};
+		}
+
+		function eventCallback(message) {
+			console.log('Message', message);
+			if(message.eventType === 'orientationChange') {
+				foundPaywall = false;
+				return true; // This will pull the curtain
+			} else if(message.eventType === 'paywall') {
+				foundPaywall = true;
+				return true // This will not pull the curtain
+			} else if(message.eventType === 'navigateToURL') {
+				return false; // This will not redirect the page
+			} else if(foundUnsupported && message.eventType === 'metadata') {
+				console.log('METADATA: ', message.metadata);
+				renderCustomContent(message.metadata.articleTitle, message.metadata.coverImage, message.metadata.publicationName);
+			}
+		}
+
+		function errorCallback(message) {
+			console.log(message);
+			if(message.errorCode === '700') {
+				foundUnsupported = true;
+			}
+			return true;
+		}
+
+		function redirectCallbackHandler(message) {
+			console.log(message);
+		}
+	</script>
+</body>
+</html>
+
