@@ -12,4 +12,4 @@ http://somedomain.com?product_id=folio.product.id&guid=guid
 
 Example:
 
-https://github.com/j133y/folio-webviewer/blob/master/img/example.png
+![example](https://github.com/j133y/folio-webviewer/blob/master/img/example.png "Web Viewer")
